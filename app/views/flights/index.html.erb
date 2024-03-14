@@ -1,0 +1,20 @@
+<%= form_with(url: root_path, method: "get") do %>
+  <%= select_tag :departure_airport_id, options_for_select(@airports, selected: params[:departure_airport_id]), prompt: "Select Departure Airport" %>
+  <%= select_tag :arrival_airport_id, options_for_select(@airports, selected: params[:arrival_airport_id]), prompt: "Select Arrival Airport" %>
+  <%= select_tag :date, options_for_select(@dates, selected: params[:date]), prompt: "Select Date" %>
+  <%= select_tag :num_passengers, options_for_select(@num_passengers, selected: params[:num_passengers]), prompt: "Select Number of Passengers" %>
+  <%= submit_tag "Search" %>
+<% end %>
+<%= form_with(url: bookings_new_path, method: "get") do |form| %>
+  <% if @flights.any? %>
+    <h2>Select a Flight:</h2>
+    <% @flights.each do |flight| %>
+      <div>
+        <%= form.radio_button :flight_id, flight.id %>
+        <%= label_tag "flight_#{flight.id}", "Flight from #{flight.departure_airport.code} to #{flight.arrival_airport.code}, Departure: #{flight.start_datetime.strftime("%d/%m/%Y %H:%M")}, Duration: #{flight.duration} minutes" %>
+      </div>
+    <% end %>
+    <%= hidden_field_tag :num_passengers, params[:num_passengers] %>
+    <%= form.submit "Book Flight" %>
+  <% end %>
+<% end %>

@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  departure_airport_id: 1
+  arrival_airport_id: 1
+  start_datetime: 2024-03-15 00:53:22
+  duration: 1
+
+two:
+  departure_airport_id: 1
+  arrival_airport_id: 1
+  start_datetime: 2024-03-15 00:53:22
+  duration: 1
