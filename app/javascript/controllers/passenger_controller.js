@@ -19,10 +19,12 @@ export default class extends Controller {
 
   removePassenger(event) {
     event.preventDefault();
-    const passengerFieldsCount =
-      this.fieldsTarget.querySelectorAll(".passenger-fields").length;
-    if (passengerFieldsCount > 1) {
-      event.target.closest(".passenger-fields").remove();
+    const passengerField = event.target.closest(".passenger-fields");
+    const remainingPassengerFields =
+      this.fieldsTarget.querySelectorAll(".passenger-fields").length - 1;
+
+    if (remainingPassengerFields > 0) {
+      passengerField.remove();
     } else {
       alert("You must have at least one passenger.");
     }
