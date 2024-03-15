@@ -4,10 +4,9 @@
 Airport.delete_all
 Flight.delete_all
 
-# Create airports
-sfo = Airport.create(code: 'SFO') # San Francisco
-nyc = Airport.create(code: 'NYC') # New York City
+Airport.create(code: 'SFO')
+Airport.create(code: 'NYC')
 
-# Create flights
-Flight.create(departure_airport: sfo, arrival_airport: nyc, start_datetime: '2023-04-01 12:00', duration: 360)
-Flight.create(departure_airport: nyc, arrival_airport: sfo, start_datetime: '2023-04-02 08:00', duration: 360)
+departure = Airport.find_by(code: 'SFO')
+arrival = Airport.find_by(code: 'NYC')
+Flight.create(departure_airport: departure, arrival_airport: arrival, start_datetime: DateTime.now, duration: 360)

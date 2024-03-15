@@ -1,17 +1,16 @@
-<%= form_with model: @booking, local: true do |form| %>
-  <%= hidden_field_tag 'booking[flight_id]', @flight.id %>
-
+<%= form_with(model: @booking, local: true) do |form| %>
+  <%= form.hidden_field :flight_id, value: @flight.id %>
+  
   <%= form.fields_for :passengers do |passenger_form| %>
     <div>
       <%= passenger_form.label :name %>
       <%= passenger_form.text_field :name, required: true %>
     </div>
-
     <div>
       <%= passenger_form.label :email %>
       <%= passenger_form.email_field :email, required: true %>
     </div>
   <% end %>
-
-  <%= form.submit "Create Booking" %>
+  
+  <%= form.submit "Book Flight" %>
 <% end %>

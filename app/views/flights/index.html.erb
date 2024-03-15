@@ -1,20 +1,38 @@
-<%= form_with(url: root_path, method: "get") do %>
-  <%= select_tag :departure_airport_id, options_for_select(@airports, selected: params[:departure_airport_id]), prompt: "Select Departure Airport" %>
-  <%= select_tag :arrival_airport_id, options_for_select(@airports, selected: params[:arrival_airport_id]), prompt: "Select Arrival Airport" %>
-  <%= select_tag :date, options_for_select(@dates, selected: params[:date]), prompt: "Select Date" %>
-  <%= select_tag :num_passengers, options_for_select(@num_passengers, selected: params[:num_passengers]), prompt: "Select Number of Passengers" %>
-  <%= submit_tag "Search" %>
+<%= form_with(url: root_path, method: :get, local: true) do |form| %>
+  <div>
+    <%= form.label :departure_airport_id, "Departure" %>
+    <%= form.select :departure_airport_id, options_for_select(@airports), {}, { required: true } %>
+  </div>
+  <div>
+    <%= form.label :arrival_airport_id, "Arrival" %>
+    <%= form.select :arrival_airport_id, options_for_select(@airports), {}, { required: true } %>
+  </div>
+  <div>
+    <%= form.label :num_passengers, "Number of Passengers" %>
+    <%= form.number_field :num_passengers, in: 1..4, step: 1 %>
+  </div>
+  <div>
+    <%= form.label :start_date, "Date" %>
+    <%= form.date_field :start_date, value: Date.today, min: Date.today, max: Date.today + 1.year %>
+  </div>
+  <div>
+    <%= form.submit "Search" %>
+  </div>
 <% end %>
-<%= form_with(url: bookings_new_path, method: "get") do |form| %>
-  <% if @flights.any? %>
-    <h2>Select a Flight:</h2>
-    <% @flights.each do |flight| %>
-      <div>
-        <%= form.radio_button :flight_id, flight.id %>
-        <%= label_tag "flight_#{flight.id}", "Flight from #{flight.departure_airport.code} to #{flight.arrival_airport.code}, Departure: #{flight.start_datetime.strftime("%d/%m/%Y %H:%M")}, Duration: #{flight.duration} minutes" %>
-      </div>
-    <% end %>
-    <%= hidden_field_tag :num_passengers, params[:num_passengers] %>
-    <%= form.submit "Book Flight" %>
+
+<% if @flights.any? %>
+  <h2>Available Flights:</h2>
+  <%= form_with(url: bookings_new_path, method: :get) do |form| %>
+  <% @flights.each do |flight| %>
+    <div>
+      <%= form.radio_button :flight_id, flight.id %>
+      <%= form.label :flight_id, "#{flight.departure_airport.code} to #{flight.arrival_airport.code}, Departure: #{flight.start_datetime}, Duration: #{flight.duration} minutes", value: flight.id %>
+    </div>
+    <%= form.hidden_field :num_passengers, value: params[:num_passengers] %>
+
   <% end %>
+  <%= form.submit "Select Flight" %>
+<% end %>
+<% else %>
+  <p>No flights found.</p>
 <% end %>
