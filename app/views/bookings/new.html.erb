@@ -1,16 +1,28 @@
-<%= form_with(model: @booking, local: true) do |form| %>
+<%# new.html.erb %>
+<%= form_with(model: @booking, local: true, data: { controller: "passenger" }) do |form| %>
   <%= form.hidden_field :flight_id, value: @flight.id %>
-  
-  <%= form.fields_for :passengers do |passenger_form| %>
-    <div>
-      <%= passenger_form.label :name %>
-      <%= passenger_form.text_field :name, required: true %>
-    </div>
-    <div>
-      <%= passenger_form.label :email %>
-      <%= passenger_form.email_field :email, required: true %>
-    </div>
-  <% end %>
-  
+
+  <template data-passenger-target="template">
+    <%= form.fields_for :passengers, Passenger.new, child_index: 'NEW_RECORD' do |passenger_form| %>
+      <div class="passenger-fields">
+        <%= passenger_form.label :name %>
+        <%= passenger_form.text_field :name, required: true %>
+        <%= passenger_form.label :email %>
+        <%= passenger_form.email_field :email, required: true %>
+        <%= link_to 'Remove', '#', class: 'remove-passenger' %>
+      </div>
+    <% end %>
+  </template>
+
+  <div data-passenger-target="fields">
+    <%= form.fields_for :passengers do |passenger_form| %>
+      <%= render 'passenger_fields', f: passenger_form %>
+    <% end %>
+  </div>
+
+  <div>
+    <%= link_to 'Add Passenger', '#', data: { action: "passenger#addPassenger" } %>
+  </div>
+
   <%= form.submit "Book Flight" %>
 <% end %>
